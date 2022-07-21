@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Netcat wrapper to encrypt traffic with openssl
 
 # Display usage
@@ -66,7 +66,10 @@ MY_PUBLIC_KEY=$($OPENSSL pkey -in "$MY_KEY_PATH" -outform pem -pubout)
 SKYF0L_PUBLIC_KEY_PATH="$KEYS_PATH/skyf0lpubkey.pem"
 
 # Nc loop
+WELCOME_MESSAGE="Welcome to the encrypted netcat, please use NcEnc to communicate with me!"
 (
+  echo "$WELCOME_MESSAGE"
+
   ## Wait for nc start
   sleep 0.2
 
@@ -109,7 +112,7 @@ SKYF0L_PUBLIC_KEY_PATH="$KEYS_PATH/skyf0lpubkey.pem"
   ) |
   (
     ## Receive other public key
-    sed '/-----END PUBLIC KEY-----/q' >"$SKYF0L_PUBLIC_KEY_PATH".tmp
+    sed '/-----END PUBLIC KEY-----/q' | grep -v "$WELCOME_MESSAGE" >"$SKYF0L_PUBLIC_KEY_PATH".tmp
     verbose_echo "Other public key received"
     mv "$SKYF0L_PUBLIC_KEY_PATH".tmp "$SKYF0L_PUBLIC_KEY_PATH"
 
